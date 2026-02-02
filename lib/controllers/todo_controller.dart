@@ -33,8 +33,8 @@ class TodoController extends ChangeNotifier {
           body: subTitleTEController.text.trim(),
         );
         existingTodo != null
-            ? await database.insert(todo.toMap())
-            : await database.update(existingTodo!.toMap());
+            ? await database.update(todo.toMap()).eq("id", existingTodo.id!)
+            : await database.insert(todo.toMap());
         Navigator.pop(context);
         titleTEController.clear();
         subTitleTEController.clear();
