@@ -77,10 +77,27 @@ class HomeScreen extends StatelessWidget {
                               },
                               icon: Icon(Icons.edit_note_outlined),
                             ),
-                            IconButton(
-                              color: Colors.red,
-                              onPressed: () {},
-                              icon: Icon(Icons.delete_outline),
+                            Consumer<TodoController>(
+                              builder: (context, provider, child) => IconButton(
+                                color: Colors.red,
+                                onPressed: () => provider.isLoading
+                                    ? null
+                                    : provider.deleteTodo(
+                                        context: context,
+                                        todoId: todo.id!,
+                                      ),
+                                icon:
+                                    provider.isLoading &&
+                                        provider.deletingId == todo.id
+                                    ? SizedBox(
+                                        height: 15,
+                                        width: 15,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : Icon(Icons.delete_outline),
+                              ),
                             ),
                           ],
                         ),

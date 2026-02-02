@@ -60,7 +60,10 @@ void createOrUpdateTodoDialog({
                   ),
                   onPressed: () => provider.isLoading
                       ? null
-                      : provider.createTodo(existingTodo: existingTodo,context: context),
+                      : provider.createTodo(
+                          existingTodo: existingTodo,
+                          context: context,
+                        ),
                   child: provider.isLoading
                       ? SizedBox(
                           width: 15,

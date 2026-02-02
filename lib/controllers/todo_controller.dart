@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TodoController extends ChangeNotifier {
   bool isLoading = false;
+  int? deletingId;
   final database = Supabase.instance.client.from("todos");
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -48,6 +49,31 @@ class TodoController extends ChangeNotifier {
         isLoading = false;
         notifyListeners();
       }
+    }
+  }
+
+  // --------------------------------delete todos ---------------------------------
+
+  Future<void> deleteTodo({
+    required int todoId,
+    required BuildContext context,
+  }) async {
+    isLoading = true;
+    deletingId = todoId;
+    notifyListeners();
+    try {
+    await  database.delete().eq("id", todoId);
+      // Navigator.pop(context);
+    } on SocketException catch (e) {
+      debugPrint(e.message);
+    } on FormatException catch (e) {
+      debugPrint(e.message);
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      isLoading = false;
+      deletingId = null;
+      notifyListeners();
     }
   }
 }
