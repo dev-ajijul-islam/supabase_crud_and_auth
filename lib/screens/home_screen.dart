@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_crud_and_auth/controllers/todo_controller.dart';
+import 'package:supabase_crud_and_auth/data/models/note_model.dart';
 import 'package:supabase_crud_and_auth/widgets/create_or_update_todo_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -18,7 +19,10 @@ class HomeScreen extends StatelessWidget {
       floatingActionButtonLocation: .centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          createOrUpdateTodoDialog(context: context,todoController: todoController);
+          createOrUpdateTodoDialog(
+            context: context,
+            todoController: todoController,
+          );
         },
         backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
@@ -27,7 +31,68 @@ class HomeScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          children: [Text("All todos", style: TextStyle(fontSize: 20))],
+          spacing: 20,
+          crossAxisAlignment: .start,
+          children: [
+            Text("All todos", style: TextStyle(fontSize: 20)),
+            Expanded(
+              child: StreamBuilder(
+                stream: todoController.todoStream,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text(snapshot.error.toString()));
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text("There is No Todo "));
+                  }
+
+                  final List<TodoModel> todos = snapshot.data!
+                      .map((snapshots) => TodoModel.fromMap(snapshots))
+                      .toList();
+                  return ListView.separated(
+                    itemBuilder: (context, index) {
+                      final TodoModel todo = todos[index];
+                      return ListTile(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: .circular(10),
+                        ),
+                        tileColor: Colors.teal.withAlpha(20),
+                        textColor: Colors.teal,
+                        title: Text(todo.title),
+                        subtitle: Text(todo.body),
+                        trailing: Wrap(
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                createOrUpdateTodoDialog(
+                                  todoController: todoController,
+                                  context: context,
+                                  existingTodo: todo,
+                                );
+                              },
+                              icon: Icon(Icons.edit_note_outlined),
+                            ),
+                            IconButton(
+                              color: Colors.red,
+                              onPressed: () {},
+                              icon: Icon(Icons.delete_outline),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    separatorBuilder: (context, index) => SizedBox(height: 10),
+                    itemCount: todos.length,
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

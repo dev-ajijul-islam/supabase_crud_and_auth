@@ -8,11 +8,18 @@ void createOrUpdateTodoDialog({
   required BuildContext context,
   TodoModel? existingTodo,
 }) {
+  if (existingTodo != null) {
+    todoController.titleTEController.text = existingTodo.title;
+    todoController.subTitleTEController.text = existingTodo.body;
+  } else {
+    todoController.titleTEController.clear();
+    todoController.subTitleTEController.clear();
+  }
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: .circular(10)),
-      title: Text("Create Todo"),
+      title: Text(existingTodo != null ? "Update todo" : "Create Todo"),
       content: Form(
         key: todoController.formKey,
         child: Column(
@@ -51,15 +58,16 @@ void createOrUpdateTodoDialog({
                     backgroundColor: Colors.teal,
                     shape: RoundedRectangleBorder(borderRadius: .circular(10)),
                   ),
-                  onPressed: () =>
-                      provider.isLoading ? null : provider.createTodo(),
+                  onPressed: () => provider.isLoading
+                      ? null
+                      : provider.createTodo(existingTodo: existingTodo,context: context),
                   child: provider.isLoading
                       ? SizedBox(
                           width: 15,
                           height: 16,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : Text("Create Todo"),
+                      : Text(existingTodo != null ? "Update" : "Create Todo"),
                 ),
               ),
             ),

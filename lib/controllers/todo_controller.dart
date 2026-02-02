@@ -19,7 +19,10 @@ class TodoController extends ChangeNotifier {
 
   //-----------------------create todos --------------------------------
 
-  Future<void> createTodo() async {
+  Future<void> createTodo({
+    TodoModel? existingTodo,
+    required BuildContext context,
+  }) async {
     if (formKey.currentState!.validate()) {
       isLoading = true;
       notifyListeners();
@@ -29,7 +32,10 @@ class TodoController extends ChangeNotifier {
           title: titleTEController.text.trim(),
           body: subTitleTEController.text.trim(),
         );
-        await database.insert(todo.toMap());
+        existingTodo != null
+            ? await database.insert(todo.toMap())
+            : await database.update(existingTodo!.toMap());
+        Navigator.pop(context);
         titleTEController.clear();
         subTitleTEController.clear();
       } on SocketException catch (e) {
