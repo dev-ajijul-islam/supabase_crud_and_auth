@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_crud_and_auth/controllers/todo_provider.dart';
-import 'package:supabase_crud_and_auth/data/models/note_model.dart';
+import 'package:supabase_crud_and_auth/data/models/todo_model.dart';
 
 void createOrUpdateTodoDialog({
   required TodoController todoController,

@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:supabase_crud_and_auth/data/models/note_model.dart';
+import 'package:supabase_crud_and_auth/data/models/todo_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class TodoController extends ChangeNotifier {
   bool isLoading = false;
   int? deletingId;
   final database = Supabase.instance.client.from("todos");
+  final user = Supabase.instance.client.auth.currentUser;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   final TextEditingController titleTEController = TextEditingController();
@@ -16,7 +17,8 @@ class TodoController extends ChangeNotifier {
   //----------------------read data as stream------------------------------
   var todoStream = Supabase.instance.client
       .from("todos")
-      .stream(primaryKey: ["id"]);
+      .stream(primaryKey: ["id"])
+      .eq("uid", Supabase.instance.client.auth.currentUser!.id);
 
   //-----------------------create todos --------------------------------
 
@@ -29,7 +31,7 @@ class TodoController extends ChangeNotifier {
       notifyListeners();
       try {
         final TodoModel todo = .new(
-          uid: "123",
+          uid: user!.id,
           title: titleTEController.text.trim(),
           body: subTitleTEController.text.trim(),
         );
@@ -62,7 +64,7 @@ class TodoController extends ChangeNotifier {
     deletingId = todoId;
     notifyListeners();
     try {
-    await  database.delete().eq("id", todoId);
+      await database.delete().eq("id", todoId);
       // Navigator.pop(context);
     } on SocketException catch (e) {
       debugPrint(e.message);

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_crud_and_auth/controllers/todo_provider.dart';
-import 'package:supabase_crud_and_auth/data/models/note_model.dart';
+import 'package:supabase_crud_and_auth/data/models/todo_model.dart';
 import 'package:supabase_crud_and_auth/widgets/create_or_update_todo_dialog.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,14 @@ class HomeScreen extends StatelessWidget {
         title: Text("Todo App with Supabase"),
         backgroundColor: Colors.teal,
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Supabase.instance.client.auth.signOut();
+            },
+            icon: Icon(Icons.logout),
+          ),
+        ],
       ),
       floatingActionButtonLocation: .centerFloat,
       floatingActionButton: FloatingActionButton(
