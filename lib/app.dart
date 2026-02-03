@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_crud_and_auth/controllers/google_sign_in_provider.dart';
 import 'package:supabase_crud_and_auth/controllers/sign_in_provider.dart';
 import 'package:supabase_crud_and_auth/controllers/sign_up_provider.dart';
 import 'package:supabase_crud_and_auth/controllers/todo_provider.dart';
@@ -17,6 +18,7 @@ class SupabaseCrudAndAuth extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => TodoController()),
         ChangeNotifierProvider(create: (context) => SignUpProvider()),
         ChangeNotifierProvider(create: (context) => SignInProvider()),
+        ChangeNotifierProvider(create: (context) => GoogleSignInProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

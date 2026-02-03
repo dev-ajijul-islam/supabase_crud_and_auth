@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_crud_and_auth/controllers/google_sign_in_provider.dart';
 import 'package:supabase_crud_and_auth/controllers/sign_in_provider.dart';
 
 class SignIn extends StatelessWidget {
@@ -82,6 +83,30 @@ class SignIn extends StatelessWidget {
                     ),
                   ),
                 ),
+                Consumer<GoogleSignInProvider>(
+                  builder: (context, provider, child) => SizedBox(
+                    height: 40,
+                    width: .infinity,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: .circular(10),
+                        ),
+                      ),
+                      onPressed: () => provider.isSigning
+                          ? null
+                          : handleGoogleSignIn(provider, context),
+                      child: provider.isSigning
+                          ? SizedBox(
+                              height: 15,
+                              width: 15,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text("Google Sign In"),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -92,6 +117,31 @@ class SignIn extends StatelessWidget {
 
   void handleSignUp(SignInProvider provider, BuildContext context) async {
     final isSuccess = await provider.signIn();
+    if (isSuccess) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "SignUp success",
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("SignUp Failed", style: TextStyle(color: Colors.white)),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void handleGoogleSignIn(
+    GoogleSignInProvider provider,
+    BuildContext context,
+  ) async {
+    final isSuccess = await provider.nativeGoogleSignIn();
     if (isSuccess) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
