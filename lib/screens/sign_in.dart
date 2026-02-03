@@ -3,9 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:supabase_crud_and_auth/controllers/google_sign_in_provider.dart';
 import 'package:supabase_crud_and_auth/controllers/sign_in_provider.dart';
 
-class SignIn extends StatelessWidget {
+class SignIn extends StatefulWidget {
   const SignIn({super.key});
 
+  @override
+  State<SignIn> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     final SignInProvider signInProvider = context.read<SignInProvider>();
@@ -143,22 +148,29 @@ class SignIn extends StatelessWidget {
   ) async {
     final isSuccess = await provider.nativeGoogleSignIn();
     if (isSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            "SignUp success",
-            style: TextStyle(color: Colors.white),
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "SignUp success",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.green,
           ),
-          backgroundColor: Colors.green,
-        ),
-      );
+        );
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("SignUp Failed", style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.red,
-        ),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              "SignUp Failed",
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 }

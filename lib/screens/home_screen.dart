@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_crud_and_auth/controllers/todo_provider.dart';
 import 'package:supabase_crud_and_auth/data/models/todo_model.dart';
@@ -18,8 +19,9 @@ class HomeScreen extends StatelessWidget {
         foregroundColor: Colors.white,
         actions: [
           IconButton(
-            onPressed: () {
-              Supabase.instance.client.auth.signOut();
+            onPressed: () async {
+              await Supabase.instance.client.auth.signOut();
+              await GoogleSignIn.instance.signOut();
             },
             icon: Icon(Icons.logout),
           ),
