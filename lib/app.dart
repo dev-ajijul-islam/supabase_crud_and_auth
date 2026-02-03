@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_crud_and_auth/controllers/sign_up_provider.dart';
 import 'package:supabase_crud_and_auth/controllers/todo_provider.dart';
 import 'package:supabase_crud_and_auth/screens/home_screen.dart';
 import 'package:supabase_crud_and_auth/screens/sign_up.dart';
@@ -12,6 +13,7 @@ class SupabaseCrudAndAuth extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => TodoController()),
+        ChangeNotifierProvider(create: (context) => SignUpProvider()),
       ],
       child: MaterialApp(debugShowCheckedModeBanner: false, home: SignUp()),
     );
