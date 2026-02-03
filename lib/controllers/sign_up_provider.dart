@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:supabase_crud_and_auth/data/models/user_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SignUpProvider extends ChangeNotifier {
@@ -24,8 +25,14 @@ class SignUpProvider extends ChangeNotifier {
           debugPrint(credentials.user.toString());
           emailTEController.clear();
           passwordTEController.clear();
-          
-          database.insert(values)
+
+          final UserModel userModel = UserModel(
+            uid: credentials.user!.id,
+            email: credentials.user!.email.toString(),
+            imageUrl: "",
+          );
+
+          await database.insert(userModel.toMap());
           return true;
         } else {
           debugPrint(credentials.user.toString());
