@@ -24,6 +24,8 @@ class SignUpProvider extends ChangeNotifier {
           debugPrint(credentials.user.toString());
           emailTEController.clear();
           passwordTEController.clear();
+          
+          database.insert(values)
           return true;
         } else {
           debugPrint(credentials.user.toString());
