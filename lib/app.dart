@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_crud_and_auth/controllers/todo_controller.dart';
+import 'package:supabase_crud_and_auth/controllers/todo_provider.dart';
 import 'package:supabase_crud_and_auth/screens/home_screen.dart';
+import 'package:supabase_crud_and_auth/screens/sign_up.dart';
 
 class SupabaseCrudAndAuth extends StatelessWidget {
   const SupabaseCrudAndAuth({super.key});
@@ -12,7 +13,7 @@ class SupabaseCrudAndAuth extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => TodoController()),
       ],
-      child: MaterialApp(debugShowCheckedModeBanner: false, home: HomeScreen()),
+      child: MaterialApp(debugShowCheckedModeBanner: false, home: SignUp()),
     );
   }
 }
